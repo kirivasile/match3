@@ -53,7 +53,7 @@ public class Tile : MonoBehaviour {
 			} else {
 				List<Tile> adjacent = GetAllAdjacentTiles();
 				if (adjacent.Contains(previousSelected)) {
-					if (BoardManager.Instance.CheckSwapHasMatch(X, Y, previousSelected.TileSprite)) {
+					if (BoardManager.Instance.CheckSwapHasMatch(X, Y, previousSelected)) {
 						SwapTile(previousSelected);
 						BoardManager.Instance.ClearAllMatches(previousSelected);
 						previousSelected.DeSelect();
@@ -112,5 +112,9 @@ public class Tile : MonoBehaviour {
 
 	public void Convert() {
 		Type.Convert();
+	}
+
+	public bool Equals(Tile other) {
+		return X == other.X && Y == other.Y;
 	}
 }

@@ -75,6 +75,7 @@ public class BoardManager : Singleton<BoardManager> {
 
 	public List<Tile> FindMatch(int x, int y, Sprite sprite, Vector2 direction) {
 		Tile start = tiles[x, y];
+		bool temp = start.TileSprite != sprite;
 		List<Tile> matches = new List<Tile>();
 
 		Vector2 rayStart = new Vector2(
@@ -87,6 +88,9 @@ public class BoardManager : Singleton<BoardManager> {
 
 			if (tile != null && sprite == tile.TileSprite) {
 				matches.Add(tile);
+				if (temp) {
+					Debug.Log("FOUND: " + tile.X + " " + tile.Y);
+				}
 
 				rayStart = new Vector2(
 					tile.transform.position.x + direction.x,
@@ -109,13 +113,15 @@ public class BoardManager : Singleton<BoardManager> {
 		return matches;
 	}
 
-	public bool CheckSwapHasMatch(int x, int y, Sprite sprite) {
-		List<Tile> matches = CheckMatchesInDirection(x, y, sprite, new Vector2[]{Vector2.left, Vector2.right});
+	public bool CheckSwapHasMatch(int x, int y, Tile previous) {
+		List<Tile> matches = CheckMatchesInDirection(x, y, previous.TileSprite, new Vector2[]{Vector2.left, Vector2.right});
+		matches.Remove(previous);
 		if (matches.Count >= 2) {
 			return true;
 		}
 
-		matches = CheckMatchesInDirection(x, y, sprite, new Vector2[]{Vector2.up, Vector2.down});
+		matches = CheckMatchesInDirection(x, y, previous.TileSprite, new Vector2[]{Vector2.up, Vector2.down});
+		matches.Remove(previous);
 		if (matches.Count >= 2) {
 			return true;
 		}
